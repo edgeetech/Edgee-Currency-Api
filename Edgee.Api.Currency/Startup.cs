@@ -1,15 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace Edgee.Api.Currency
 {
@@ -26,6 +19,7 @@ namespace Edgee.Api.Currency
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,7 +31,6 @@ namespace Edgee.Api.Currency
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
             app.UseCors(corsPolicyBuilder => corsPolicyBuilder
                                             .WithOrigins("http://localhost:3000")

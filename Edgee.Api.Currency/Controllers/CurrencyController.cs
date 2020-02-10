@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Edgee.Api.Currency.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 
 namespace Edgee.Api.Currency.Controllers
 {
@@ -11,48 +15,67 @@ namespace Edgee.Api.Currency.Controllers
     public class CurrencyController : ControllerBase
     {
         private readonly ILogger<CurrencyController> _logger;
+        private readonly IHttpClientFactory _clientFactory;
+        private IEnumerable<Model.Currency> _currencies;
 
-        public CurrencyController(ILogger<CurrencyController> logger)
+        public CurrencyController(ILogger<CurrencyController> logger, IHttpClientFactory clientFactory)
         {
             _logger = logger;
+            _clientFactory = clientFactory;
         }
 
         [HttpGet]
-        public IEnumerable<CurrencyModel> Currencies()
+        public IEnumerable<Model.Currency> Currencies()
         {
-            return new List<CurrencyModel>
+            if (_currencies == null)
             {
-                new CurrencyModel { Code = "TRY", Name = "Turkish Lira", Symbol = "₺", SymbolNative = "₺" },
-                new CurrencyModel { Code = "USD", Name = "US Dollar", Symbol = "$", SymbolNative = "$" },
-                new CurrencyModel { Code = "GBP", Name = "Pound", Symbol = "£", SymbolNative = "£" },
-                new CurrencyModel { Code = "EUR", Name = "Euro", Symbol = "€", SymbolNative = "€" }
-            };
-        }
-
-        [HttpGet("Exchanges")]
-        public IEnumerable<ExchangeModel> Exchanges()
-        {
-            return new List<ExchangeModel>
-            {
-                new ExchangeModel { SourceCurrency = "GBP", TargetCurrency = "TRY", ExchangeRate = 7.75m },
-                new ExchangeModel { SourceCurrency = "USD", TargetCurrency = "TRY", ExchangeRate = 5.95m },
-                new ExchangeModel { SourceCurrency = "EUR", TargetCurrency = "TRY", ExchangeRate = 6.57m }
-            };
+                var allFile = System.IO.File.ReadAllText("AppData/currencies.json");
+                _currencies = System.Text.Json.JsonSerializer.Deserialize<IEnumerable<Model.Currency>>(allFile);
+            }
+            return _currencies;
         }
 
         [HttpGet("Exchanges/{source}/{target}")]
-        public ExchangeModel ExchangeRatesBySourceAndTarget(string source, string target)
+        public async Task<ExchangeModel> ExchangeRatesBySourceAndTarget(string source, string target)
         {
-            // Read from cache
-         
+            source = source?.ToUpper();
+            target = target?.ToUpper();
             // Check source and target currency codes are valid
-
-            return new ExchangeModel
+            var currencies = Currencies();
+            if (!(currencies.Any(x => x.Code.Equals(source)) && currencies.Any(x => x.Code.Equals(target))))
             {
-                SourceCurrency = source,
-                TargetCurrency = target,
-                ExchangeRate = new decimal(new Random().NextDouble())
-            };
+                _logger.LogError("Source or Target currency invalid!");
+                throw new ArgumentException("Source or Target currency invalid");
+            }
+
+            var request = new HttpRequestMessage(HttpMethod.Get, "https://api.exchangeratesapi.io/latest?base=" + source + "&symbols=" + target);
+
+            using (var client = _clientFactory.CreateClient())
+            {
+                var response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseStream = await response.Content.ReadAsStringAsync();
+
+                    var jo = JObject.Parse(responseStream);
+                    var currencyRate = jo["rates"][target].ToString();
+                    var updateDate = jo["date"].ToString();
+                    var exchange = new ExchangeModel
+                    {
+                        SourceCurrency = source,
+                        TargetCurrency = target,
+                        ExchangeRate = (decimal)double.Parse(currencyRate),
+                        Date = DateTime.Parse(updateDate)
+                    };
+                    _logger.LogInformation("Exchange information read successful!", exchange);
+                    return exchange;
+                }
+                else
+                {
+                    _logger.LogError("Exchange rates cannot be read!", response.StatusCode);
+                }
+            }
+            return default;
         }
     }
 }

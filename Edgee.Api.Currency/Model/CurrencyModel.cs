@@ -1,6 +1,6 @@
 ﻿namespace Edgee.Api.Currency.Model
 {
-    public class CurrencyModel
+    public class Currency
     {
         public string Symbol { get; set; }
         public string Name { get; set; }
