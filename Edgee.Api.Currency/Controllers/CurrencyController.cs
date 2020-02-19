@@ -4,8 +4,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Edgee.Api.Currency.Model;
+using Edgee.Api.Currency.Utility;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using NCrontab;
 using Newtonsoft.Json.Linq;
 
 namespace Edgee.Api.Currency.Controllers
@@ -16,21 +19,28 @@ namespace Edgee.Api.Currency.Controllers
     {
         private readonly ILogger<CurrencyController> _logger;
         private readonly IHttpClientFactory _clientFactory;
-        private IEnumerable<Model.Currency> _currencies;
+        private readonly string BASE_CURRENCY_EXCHANGE_SERVICE_URL = @"https://api.exchangeratesapi.io/latest";
+        private readonly IMemoryCache _cache;
 
-        public CurrencyController(ILogger<CurrencyController> logger, IHttpClientFactory clientFactory)
+        public CurrencyController(ILogger<CurrencyController> logger,
+            IHttpClientFactory clientFactory,
+            IMemoryCache cache)
         {
             _logger = logger;
             _clientFactory = clientFactory;
+            _cache = cache;
         }
 
         [HttpGet]
         public IEnumerable<Model.Currency> Currencies()
         {
+            var _currencies = _cache.Get<IEnumerable<Model.Currency>>("CURRENCIES");
+
             if (_currencies == null)
             {
                 var allFile = System.IO.File.ReadAllText("AppData/currencies.json");
                 _currencies = System.Text.Json.JsonSerializer.Deserialize<IEnumerable<Model.Currency>>(allFile);
+                _cache.Set("CURRENCIES", _currencies);
             }
             return _currencies;
         }
@@ -48,7 +58,15 @@ namespace Edgee.Api.Currency.Controllers
                 throw new ArgumentException("Source or Target currency invalid");
             }
 
-            var request = new HttpRequestMessage(HttpMethod.Get, "https://api.exchangeratesapi.io/latest?base=" + source + "&symbols=" + target);
+            var requestUrl = "?base=" + source + "&symbols=" + target;
+
+            if (_cache.TryGetValue(requestUrl, out ExchangeModel responseRate))
+            {
+                return responseRate;
+            }
+            string cron = "0 16 * * 1-5"; // Every weekday at 16.00 pm
+            var expiryDate = CronHelper.FindNextUpdateTime(DateTime.Now, cron);
+            var request = new HttpRequestMessage(HttpMethod.Get, BASE_CURRENCY_EXCHANGE_SERVICE_URL + requestUrl);
 
             using (var client = _clientFactory.CreateClient())
             {
@@ -68,6 +86,7 @@ namespace Edgee.Api.Currency.Controllers
                         Date = DateTime.Parse(updateDate)
                     };
                     _logger.LogInformation("Exchange information read successful!", exchange);
+                    _cache.Set(requestUrl, exchange, expiryDate);
                     return exchange;
                 }
                 else

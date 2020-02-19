@@ -20,6 +20,7 @@ namespace Edgee.Api.Currency
         {
             services.AddControllers();
             services.AddHttpClient();
+            services.AddMemoryCache();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

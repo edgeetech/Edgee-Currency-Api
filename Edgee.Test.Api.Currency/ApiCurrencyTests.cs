@@ -1,4 +1,6 @@
 using Edgee.Api.Currency.Controllers;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using System;
 using Xunit;
 
@@ -10,7 +12,9 @@ namespace Edgee.Test.Api.Currency
 
         public ApiCurrencyTests()
         {
-            _currencyController = new CurrencyController(new FakeLogger(), new FakeHttpClientFactory());
+            _currencyController = new CurrencyController(new FakeLogger(),
+                new FakeHttpClientFactory(),
+                new MemoryCache(new MemoryCacheOptions()));
         }
 
         [Fact]
