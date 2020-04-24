@@ -2,6 +2,9 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/Edgee.Test.Api.Currency/obj
-/Edgee.Api.Currency/obj
 /.vs/Edgee Currency Api/v16
+
+bin
+obj
+packages
+appsettings.json
