@@ -1,2 +1,3 @@
-# Edgee-Currency-Api
-Currency microservice for PayNShare application
+# Edgee-Vutbu-Microservices
+Currency microservice for PayNShare (Vutbu) application
+Dictionary microservice for PayNShare (Vutbu) application
