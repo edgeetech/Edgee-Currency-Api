@@ -1,0 +1,154 @@
+{
+  "info": {
+    "_postman_id": "c5ee2268-102d-402d-9674-5f43a4c2d438",
+    "name": "Basic Balance Web Api",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get Request",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true,
+        "followOriginalHttpMethod": false
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:44337/balance",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "44337",
+          "path": [
+            "balance"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Post Request",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "type": "text",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"Amount\": 44,\n    \"CustomerNumber\": 444,\n    \"Description\": \"New Record Save For 44\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:44337/balance",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "44337",
+          "path": [
+            "balance"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Put Request",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "type": "text",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"Amount\": 350,\n    \"CustomerNumber\": 222,\n    \"Description\": \"Updated For Customer 222\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:44337/balance",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "44337",
+          "path": [
+            "balance"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Request",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"CustomerNumber\": 444\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:44337/balance",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "44337",
+          "path": [
+            "balance"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "protocolProfileBehavior": {}
+}
