@@ -12,6 +12,12 @@ namespace Edgee.Api.Dictionary.Model
         [MaxLength(20)]
         [Required]
         public string LanguageCode { get; set; }
+        [MaxLength(50)]
+        [Required]
+        public string Name { get; set; }
+        [MaxLength(50)]
+        [Required]
+        public string NativeName { get; set; }
 
         public List<DictionaryItem> DictionaryItems { get; set; }
     }

@@ -3,14 +3,16 @@ using Edgee.Api.Dictionary.DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Edgee.Api.Dictionary.Migrations
 {
     [DbContext(typeof(DictionaryDbContext))]
-    partial class DictionaryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200425124553_Edgee.Api.Dictionary.Model.DataLayer.NewColumnsAndNavigation")]
+    partial class EdgeeApiDictionaryModelDataLayerNewColumnsAndNavigation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -2,7 +2,7 @@
 
 namespace Edgee.Api.Currency.Model
 {
-    public class ExchangeModel
+    public class Exchange
     {
         public string SourceCurrency { get; set; }
         public string TargetCurrency { get; set; }

@@ -46,7 +46,7 @@ namespace Edgee.Api.Currency.Controllers
         }
 
         [HttpGet("Exchanges/{source}/{target}")]
-        public async Task<ExchangeModel> ExchangeRatesBySourceAndTarget(string source, string target)
+        public async Task<Exchange> ExchangeRatesBySourceAndTarget(string source, string target)
         {
             source = source?.ToUpper();
             target = target?.ToUpper();
@@ -60,7 +60,7 @@ namespace Edgee.Api.Currency.Controllers
 
             var requestUrl = "?base=" + source + "&symbols=" + target;
 
-            if (_cache.TryGetValue(requestUrl, out ExchangeModel responseRate))
+            if (_cache.TryGetValue(requestUrl, out Exchange responseRate))
             {
                 return responseRate;
             }
@@ -78,7 +78,7 @@ namespace Edgee.Api.Currency.Controllers
                     var jo = JObject.Parse(responseStream);
                     var currencyRate = jo["rates"][target].ToString();
                     var updateDate = jo["date"].ToString();
-                    var exchange = new ExchangeModel
+                    var exchange = new Exchange
                     {
                         SourceCurrency = source,
                         TargetCurrency = target,

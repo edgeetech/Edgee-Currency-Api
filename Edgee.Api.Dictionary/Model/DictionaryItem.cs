@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace Edgee.Api.Dictionary.Model
 {
@@ -17,5 +14,7 @@ namespace Edgee.Api.Dictionary.Model
         public string Key { get; set; }
         [Required]
         public string Value { get; set; }
+
+        public Language Language { get; set; }
     }
 }
