@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Edgee.Api.Dictionary.Model
+namespace Edgee.Api.Dictionary.DataLayer
 {
     public class Language
     {

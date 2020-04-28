@@ -1,5 +1,4 @@
-﻿using Edgee.Api.Dictionary.Model;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Edgee.Api.Dictionary.DataLayer
 {
