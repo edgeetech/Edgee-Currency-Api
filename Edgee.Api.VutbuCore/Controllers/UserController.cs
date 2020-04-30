@@ -1,6 +1,8 @@
-﻿using Edgee.Api.VutbuCore.DataLayer;
+﻿using Edgee.Api.VutbuCore.Message;
+using Edgee.Api.VutbuCore.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace Edgee.Api.VutbuCore.Controllers
 {
@@ -9,21 +11,65 @@ namespace Edgee.Api.VutbuCore.Controllers
     public class UserController : ControllerBase
     {
         private readonly ILogger<UserController> _logger;
-        private readonly VutbuDbContext _dbContext;
+        private readonly IUserService _userService;
+        private readonly IObfuscateService _obfuscateService;
 
-        public UserController(ILogger<UserController> logger, VutbuDbContext dbContext)
+        public UserController(ILogger<UserController> logger,
+            IUserService userService,
+            IObfuscateService obfuscateService
+            )
         {
             _logger = logger;
-            _dbContext = dbContext;
+            _userService = userService;
+            _obfuscateService = obfuscateService;
         }
 
-        //[HttpGet("GetAll")]
-        //public IEnumerable<DictionaryItem> GetAll(string languageCode = "en-GB")
-        //{
-        //    return _dbContext.DictionaryItems
-        //        .AsNoTracking()
-        //        .Where(x => x.Language.LanguageCode.Equals(languageCode))
-        //        .ToList();
-        //}
+        [HttpPost]
+        public IActionResult AddNewUser(EditUserMessage userMessage)
+        {
+            try
+            {
+                _userService.AddUser(userMessage);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, userMessage);
+                return BadRequest(ex.Message);
+            }
+
+            return Ok("User saved successfully");
+        }
+
+        [HttpPut]
+        public IActionResult UpdateUser(EditUserMessage userMessage)
+        {
+            try
+            {
+                _userService.UpdateUser(userMessage);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, userMessage);
+                return BadRequest(ex.Message);
+            }
+
+            return Ok("User saved successfully");
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteUser(EditUserMessage userMessage)
+        {
+            try
+            {
+                _obfuscateService.ObfuscateUser(userMessage);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, userMessage);
+                return BadRequest(ex.Message);
+            }
+
+            return Ok("User and related information removed from system successfully");
+        }
     }
 }

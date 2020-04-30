@@ -63,7 +63,7 @@ namespace Edgee.Api.VutbuCore.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("GroupAdmin");
+                    b.ToTable("GroupAdmins");
                 });
 
             modelBuilder.Entity("Edgee.Api.VutbuCore.DataLayer.User", b =>
@@ -72,9 +72,6 @@ namespace Edgee.Api.VutbuCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("GroupId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -95,8 +92,6 @@ namespace Edgee.Api.VutbuCore.Migrations
                         .HasMaxLength(50);
 
                     b.HasKey("UserId");
-
-                    b.HasIndex("GroupId");
 
                     b.ToTable("Users");
                 });
@@ -214,13 +209,6 @@ namespace Edgee.Api.VutbuCore.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Edgee.Api.VutbuCore.DataLayer.User", b =>
-                {
-                    b.HasOne("Edgee.Api.VutbuCore.DataLayer.Group", null)
-                        .WithMany("GroupMembers")
-                        .HasForeignKey("GroupId");
                 });
 
             modelBuilder.Entity("Edgee.Api.VutbuCore.DataLayer.UserContact", b =>

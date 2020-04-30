@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Edgee.Api.VutbuCore.Migrations
 {
     [DbContext(typeof(VutbuDbContext))]
-    [Migration("20200427115929_Edgee.Api.VutbuCore.UserAndGroup")]
-    partial class EdgeeApiVutbuCoreUserAndGroup
+    [Migration("20200429121831_GroupAdmin-DbSet-Create")]
+    partial class GroupAdminDbSetCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -65,7 +65,7 @@ namespace Edgee.Api.VutbuCore.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("GroupAdmin");
+                    b.ToTable("GroupAdmins");
                 });
 
             modelBuilder.Entity("Edgee.Api.VutbuCore.DataLayer.User", b =>
@@ -74,9 +74,6 @@ namespace Edgee.Api.VutbuCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("GroupId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -97,8 +94,6 @@ namespace Edgee.Api.VutbuCore.Migrations
                         .HasMaxLength(50);
 
                     b.HasKey("UserId");
-
-                    b.HasIndex("GroupId");
 
                     b.ToTable("Users");
                 });
@@ -135,6 +130,41 @@ namespace Edgee.Api.VutbuCore.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserContacts");
+                });
+
+            modelBuilder.Entity("Edgee.Api.VutbuCore.DataLayer.UserFinancial", b =>
+                {
+                    b.Property<int>("UserFinancialId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AccountNumber")
+                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(20);
+
+                    b.Property<string>("CurrencyCode")
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
+
+                    b.Property<string>("IBAN")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
+
+                    b.Property<string>("SortCode")
+                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(20);
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserFinancialId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserFinancials");
                 });
 
             modelBuilder.Entity("Edgee.Api.VutbuCore.DataLayer.UserGroup", b =>
@@ -183,18 +213,20 @@ namespace Edgee.Api.VutbuCore.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Edgee.Api.VutbuCore.DataLayer.User", b =>
-                {
-                    b.HasOne("Edgee.Api.VutbuCore.DataLayer.Group", null)
-                        .WithMany("GroupMembers")
-                        .HasForeignKey("GroupId");
-                });
-
             modelBuilder.Entity("Edgee.Api.VutbuCore.DataLayer.UserContact", b =>
                 {
                     b.HasOne("Edgee.Api.VutbuCore.DataLayer.User", null)
                         .WithMany("UserContacts")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Edgee.Api.VutbuCore.DataLayer.UserFinancial", b =>
+                {
+                    b.HasOne("Edgee.Api.VutbuCore.DataLayer.User", null)
+                        .WithOne("UserFinancial")
+                        .HasForeignKey("Edgee.Api.VutbuCore.DataLayer.UserFinancial", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

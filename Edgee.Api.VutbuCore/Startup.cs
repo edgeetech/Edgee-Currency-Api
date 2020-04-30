@@ -1,4 +1,5 @@
 using Edgee.Api.VutbuCore.DataLayer;
+using Edgee.Api.VutbuCore.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,11 @@ namespace Edgee.Api.VutbuCore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<VutbuDbContext>(opts => opts.UseSqlServer(Configuration["ConnectionString:DictionaryDb"]));
+            
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IGroupService, GroupService>();
+            services.AddScoped<IObfuscateService, ObfuscateService>();
+
             services.AddControllers();
         }
 

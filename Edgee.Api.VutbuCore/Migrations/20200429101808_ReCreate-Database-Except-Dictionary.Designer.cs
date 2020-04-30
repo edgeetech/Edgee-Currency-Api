@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Edgee.Api.VutbuCore.Migrations
 {
     [DbContext(typeof(VutbuDbContext))]
-    [Migration("20200428064001_Edgee.Api.UserFinancial")]
-    partial class EdgeeApiUserFinancial
+    [Migration("20200429101808_ReCreate-Database-Except-Dictionary")]
+    partial class ReCreateDatabaseExceptDictionary
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -75,9 +75,6 @@ namespace Edgee.Api.VutbuCore.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("GroupId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(250)")
@@ -97,8 +94,6 @@ namespace Edgee.Api.VutbuCore.Migrations
                         .HasMaxLength(50);
 
                     b.HasKey("UserId");
-
-                    b.HasIndex("GroupId");
 
                     b.ToTable("Users");
                 });
@@ -216,13 +211,6 @@ namespace Edgee.Api.VutbuCore.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Edgee.Api.VutbuCore.DataLayer.User", b =>
-                {
-                    b.HasOne("Edgee.Api.VutbuCore.DataLayer.Group", null)
-                        .WithMany("GroupMembers")
-                        .HasForeignKey("GroupId");
                 });
 
             modelBuilder.Entity("Edgee.Api.VutbuCore.DataLayer.UserContact", b =>

@@ -9,6 +9,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200428063845_Edgee.Api.UserFinancial.cs" />
     <Compile Remove="Migrations\20200428063845_Edgee.Api.UserFinancial.Designer.cs" />
+    <Compile Remove="Migrations\20200429101543_ReCreate-Database-Except-Dictionary.cs" />
+    <Compile Remove="Migrations\20200429101543_ReCreate-Database-Except-Dictionary.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

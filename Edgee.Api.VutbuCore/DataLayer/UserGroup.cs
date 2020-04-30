@@ -20,7 +20,7 @@ namespace Edgee.Api.VutbuCore.DataLayer
         [Required]
         public DateTime JoinDate { get; set; }
         public DateTime? LeaveDate { get; set; }
-        
+
         public User User { get; set; }
         public Group Group { get; set; }
     }

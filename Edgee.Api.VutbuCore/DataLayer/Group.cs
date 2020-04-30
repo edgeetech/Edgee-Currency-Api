@@ -19,6 +19,5 @@ namespace Edgee.Api.VutbuCore.DataLayer
         public string GroupPhoto { get; set; }
 
         public List<GroupAdmin> GroupAdmins { get; set; }
-        public List<User> GroupMembers { get; set; }
     }
 }

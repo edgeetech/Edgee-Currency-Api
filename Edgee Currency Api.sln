@@ -9,7 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edgee.Test.Api.Currency", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edgee.Api.Dictionary", "Edgee.Api.Dictionary\Edgee.Api.Dictionary.csproj", "{5DBD68EC-980C-4FC7-A1B2-BF21D147BE8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Edgee.Api.VutbuCore", "Edgee.Api.VutbuCore\Edgee.Api.VutbuCore.csproj", "{3017570B-858C-4863-A5F3-7416402E5CB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edgee.Api.VutbuCore", "Edgee.Api.VutbuCore\Edgee.Api.VutbuCore.csproj", "{3017570B-858C-4863-A5F3-7416402E5CB6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Postman", "Postman", "{D23DFC07-D621-4A9C-9DF0-151CB6E2EC71}"
+	ProjectSection(SolutionItems) = preProject
+		currency-postman-collection.json = currency-postman-collection.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

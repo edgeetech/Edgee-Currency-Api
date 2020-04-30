@@ -7,5 +7,6 @@ namespace Edgee.Api.VutbuCore.Services
         public void AddUser(EditUserMessage userMessage);
         public void UpdateUser(EditUserMessage userMessage);
         public void ChangeUsername(int userId, string newUserName);
+        public int GetUserIdByUserName(string newUserName);
     }
 }

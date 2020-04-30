@@ -6,6 +6,7 @@ namespace Edgee.Api.VutbuCore.DataLayer
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Group> Groups { get; set; }
+        public DbSet<GroupAdmin> GroupAdmins { get; set; }
         public DbSet<UserContact> UserContacts { get; set; }
         public DbSet<UserGroup> UserGroups { get; set; }
         public DbSet<UserFinancial> UserFinancials { get; set; }

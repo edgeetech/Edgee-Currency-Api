@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Edgee.Api.VutbuCore.Migrations
 {
-    public partial class EdgeeApiVutbuCoreUserAndGroup : Migration
+    public partial class ReCreateDatabaseExceptDictionary : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -31,18 +31,11 @@ namespace Edgee.Api.VutbuCore.Migrations
                     Username = table.Column<string>(maxLength: 50, nullable: false),
                     Name = table.Column<string>(maxLength: 250, nullable: false),
                     Surname = table.Column<string>(maxLength: 250, nullable: true),
-                    ProfilePhoto = table.Column<string>(maxLength: 250, nullable: true),
-                    GroupId = table.Column<int>(nullable: true)
+                    ProfilePhoto = table.Column<string>(maxLength: 250, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.UserId);
-                    table.ForeignKey(
-                        name: "FK_Users_Groups_GroupId",
-                        column: x => x.GroupId,
-                        principalTable: "Groups",
-                        principalColumn: "GroupId",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -95,6 +88,29 @@ namespace Edgee.Api.VutbuCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserFinancials",
+                columns: table => new
+                {
+                    UserFinancialId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(nullable: false),
+                    IBAN = table.Column<string>(maxLength: 250, nullable: false),
+                    CurrencyCode = table.Column<string>(maxLength: 10, nullable: true),
+                    SortCode = table.Column<string>(maxLength: 20, nullable: true),
+                    AccountNumber = table.Column<string>(maxLength: 20, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserFinancials", x => x.UserFinancialId);
+                    table.ForeignKey(
+                        name: "FK_UserFinancials_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserGroups",
                 columns: table => new
                 {
@@ -139,6 +155,12 @@ namespace Edgee.Api.VutbuCore.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserFinancials_UserId",
+                table: "UserFinancials",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserGroups_GroupId",
                 table: "UserGroups",
                 column: "GroupId");
@@ -147,11 +169,6 @@ namespace Edgee.Api.VutbuCore.Migrations
                 name: "IX_UserGroups_UserId",
                 table: "UserGroups",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_GroupId",
-                table: "Users",
-                column: "GroupId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -163,13 +180,16 @@ namespace Edgee.Api.VutbuCore.Migrations
                 name: "UserContacts");
 
             migrationBuilder.DropTable(
+                name: "UserFinancials");
+
+            migrationBuilder.DropTable(
                 name: "UserGroups");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Groups");
 
             migrationBuilder.DropTable(
-                name: "Groups");
+                name: "Users");
         }
     }
 }
