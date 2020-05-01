@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Edgee.Api.VutbuCore.DataLayer;
 using Edgee.Api.VutbuCore.Message;
+using Microsoft.EntityFrameworkCore;
 
 namespace Edgee.Api.VutbuCore.Services
 {
@@ -18,6 +19,11 @@ namespace Edgee.Api.VutbuCore.Services
         {
             // Check required info persist
             // Check username is not taken
+            if (_dbContext.Users.AsNoTracking().Any(x => x.Username.ToLower().Equals(userMessage.Username.ToLower())))
+            {
+                throw new InvalidOperationException($"Username '{userMessage.Username}' is already taken");
+            }
+
             // Check mobileNumber is unique
             // Check emailaddress is unique
 
